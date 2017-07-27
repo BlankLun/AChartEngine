@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2009 - 2013 SC 4ViewSoft SRL
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -173,6 +173,10 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
      * charts.
      */
     private boolean mXRoundedLabels = true;
+    /** The X label format. */
+    private NumberFormat mXLabelFormat;
+    /** The Y label format. */
+    private NumberFormat[] mYLabelFormat;
     /**
      * The label format.
      */
@@ -212,7 +216,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
     private float colorRampWidth = 10f; //颜色渐变色带的宽度
 
-    private int[] colorRampGradient =new int[]{};  //渐变色带的颜色值组
+    private int[] colorRampGradient = new int[]{};  //渐变色带的颜色值组
 
     private float[] colorRampGradientPosition = new float[]{}; //渐变颜色位置阀值
 
@@ -254,6 +258,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
         yLabelsAlign = new Align[scales];
         yAxisAlign = new Align[scales];
         mYLabelsColor = new int[scales];
+        mYLabelFormat = new NumberFormat[scales];
         mMinX = new double[scales];
         mMaxX = new double[scales];
         mMinY = new double[scales];
@@ -261,6 +266,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
         mGridColors = new int[scales];
         for (int i = 0; i < scales; i++) {
             mYLabelsColor[i] = TEXT_COLOR;
+            mYLabelFormat[i] = NumberFormat.getNumberInstance();
             mGridColors[i] = Color.argb(75, 200, 200, 200);
             initAxesRangeForScale(i);
         }
@@ -1316,18 +1322,59 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
      * Returns the number format for displaying labels.
      *
      * @return the number format for labels
+     * @deprecated use getXLabelFormat and getYLabelFormat instead
      */
     public NumberFormat getLabelFormat() {
-        return mLabelFormat;
+        return getXLabelFormat();
     }
 
     /**
      * Sets the number format for displaying labels.
      *
      * @param format the number format for labels
+     * @deprecated use setXLabelFormat and setYLabelFormat instead
      */
     public void setLabelFormat(NumberFormat format) {
-        mLabelFormat = format;
+        setXLabelFormat(format);
+
+    }
+
+    /**
+     * Returns the number format for displaying X axis labels.
+     *
+     * @return the number format for X axis labels
+     */
+    public NumberFormat getXLabelFormat() {
+        return mXLabelFormat;
+    }
+
+    /**
+     * Sets the number format for X axis displaying labels.
+     *
+     * @param format the number format for X axis labels
+     */
+    public void setXLabelFormat(NumberFormat format) {
+        mXLabelFormat = format;
+    }
+
+    /**
+     * Returns the number format for Y axis displaying labels.
+     *
+     * @param scale the renderer scale
+     * @return the number format for Y axis labels
+     */
+    public NumberFormat getYLabelFormat(int scale) {
+        return mYLabelFormat[scale];
+    }
+
+    /**
+     * Sets the number format for Y axis displaying labels.
+     *
+     * @param format the number format for labels
+     * @param scale the renderer scale
+     */
+    public void setYLabelFormat(NumberFormat format, int scale) {
+        mYLabelFormat[scale] = format;
     }
 
     /**

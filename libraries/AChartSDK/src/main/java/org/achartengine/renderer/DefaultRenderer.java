@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2009 - 2013 SC 4ViewSoft SRL
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -78,13 +78,33 @@ public class DefaultRenderer implements Serializable {
      */
     private boolean mShowAxes = true;
     /**
+     * The Y axis color.
+     */
+    private int mYAxisColor = TEXT_COLOR;
+    /**
+     * The X axis color.
+     */
+    private int mXAxisColor = TEXT_COLOR;
+    /**
      * The axes color.
      */
     private int mAxesColor = TEXT_COLOR;
     /**
+     * If the X labels are visible.
+     */
+    private boolean mShowXLabels = true;
+    /**
+     * If the Y labels are visible.
+     */
+    private boolean mShowYLabels = true;
+    /**
      * If the labels are visible.
      */
     private boolean mShowLabels = true;
+    /**
+     * If the tick marks are visible.
+     */
+    private boolean mShowTickMarks = true;
     /**
      * The labels color.
      */
@@ -113,6 +133,10 @@ public class DefaultRenderer implements Serializable {
      * If the Y axis grid should be displayed.
      */
     private boolean mShowGridY = false;
+    /**
+     * The grid width.
+     */
+    private float mGridLineWidth;
     /**
      * If the custom text grid should be displayed on the X axis.
      */
@@ -298,7 +322,6 @@ public class DefaultRenderer implements Serializable {
      * Returns the simple renderer from the multiple renderer list.
      *
      * @param index the index in the simple renderers list
-     *
      * @return the simple renderer at the specified index
      */
     public SimpleSeriesRenderer getSeriesRendererAt(int index) {
@@ -319,9 +342,11 @@ public class DefaultRenderer implements Serializable {
     }
 
     public int getSupportSeriesRendererCount() {
-        if (mSupportRenders.size() == 0){
+        if (mSupportRenders.size() == 0) {
             SupportSeriesRender supportSeriesRender = new SupportSeriesRender();
-            mSupportRenders.add(supportSeriesRender);
+            for (int i = 0; i < mRenderers.size(); i++) {
+                mSupportRenders.add(supportSeriesRender);
+            }
         }
         return mSupportRenders.size();
     }
@@ -387,6 +412,44 @@ public class DefaultRenderer implements Serializable {
      */
     public void setAxesColor(int color) {
         mAxesColor = color;
+        this.setXAxisColor(color);
+        this.setYAxisColor(color);
+    }
+
+    /**
+     * Returns the color of the Y axis
+     *
+     * @return the Y axis color
+     */
+    public int getYAxisColor() {
+        return mYAxisColor;
+    }
+
+    /**
+     * Sets the Y axis color.
+     *
+     * @param color the Y axis color
+     */
+    public void setYAxisColor(int color) {
+        mYAxisColor = color;
+    }
+
+    /**
+     * Returns the color of the X axis
+     *
+     * @return the X axis color
+     */
+    public int getXAxisColor() {
+        return mXAxisColor;
+    }
+
+    /**
+     * Sets the X axis color.
+     *
+     * @param color the X axis color
+     */
+    public void setXAxisColor(int color) {
+        mXAxisColor = color;
     }
 
     /**
@@ -449,7 +512,25 @@ public class DefaultRenderer implements Serializable {
      * @return the visibility flag for the labels
      */
     public boolean isShowLabels() {
-        return mShowLabels;
+        return mShowLabels || mShowXLabels || mShowYLabels;
+    }
+
+    /**
+     * Returns if the X labels should be visible.
+     *
+     * @return the visibility flag for the X labels
+     */
+    public boolean isShowXLabels() {
+        return mShowXLabels;
+    }
+
+    /**
+     * Returns if the Y labels should be visible.
+     *
+     * @return the visibility flag for the Y labels
+     */
+    public boolean isShowYLabels() {
+        return mShowYLabels;
     }
 
     /**
@@ -459,6 +540,37 @@ public class DefaultRenderer implements Serializable {
      */
     public void setShowLabels(boolean showLabels) {
         mShowLabels = showLabels;
+        mShowXLabels = showLabels;
+        mShowYLabels = showLabels;
+    }
+
+    /**
+     * Sets if the labels should be visible.
+     *
+     * @param showXLabels the visibility flag for the X labels
+     * @param showYLabels the visibility flag for the Y labels
+     */
+    public void setShowLabels(boolean showXLabels, boolean showYLabels) {
+        mShowXLabels = showXLabels;
+        mShowYLabels = showYLabels;
+    }
+
+    /**
+     * Returns if the tick marks should be visible.
+     *
+     * @return
+     */
+    public boolean isShowTickMarks() {
+        return mShowTickMarks;
+    }
+
+    /**
+     * Sets if the tick marks should be visible.
+     *
+     * @param showTickMarks the visibility flag for the tick marks
+     */
+    public void setShowTickMarks(boolean showTickMarks) {
+        this.mShowTickMarks = showTickMarks;
     }
 
     /**
@@ -486,6 +598,24 @@ public class DefaultRenderer implements Serializable {
      */
     public void setShowGridX(boolean showGrid) {
         mShowGridX = showGrid;
+    }
+
+    /**
+     * Sets the grid line width.
+     *
+     * @param width the grid size
+     */
+    public void setGridLineWidth(float width) {
+        mGridLineWidth = width;
+    }
+
+    /**
+     * Gets the grid line width.
+     *
+     * @return the grid line width
+     */
+    public float getGridLineWidth() {
+        return mGridLineWidth;
     }
 
     /**
@@ -903,6 +1033,9 @@ public class DefaultRenderer implements Serializable {
      * @param startAngle the start angle in degrees
      */
     public void setStartAngle(float startAngle) {
+        while (startAngle < 0) {
+            startAngle += 360;
+        }
         mStartAngle = startAngle;
     }
 

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2009 - 2013 SC 4ViewSoft SRL
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@ package org.achartengine;
 
 import android.content.Context;
 
+import android.content.Intent;
 import org.achartengine.chart.BarChart;
 import org.achartengine.chart.BarChart.Type;
 import org.achartengine.chart.BubbleChart;
@@ -77,8 +78,8 @@ public class ChartFactory {
     }
 
     public static final GraphicalView getSupportLineChartView(Context context,
-                                                       XYMultipleSeriesDataset dataset,
-                                                       XYMultipleSeriesRenderer renderer) {
+                                                              XYMultipleSeriesDataset dataset,
+                                                              XYMultipleSeriesRenderer renderer) {
         checkParameters(dataset, renderer);
         XYChart chart = new LineChart(dataset, renderer);
         return new GraphicalView(context, chart);
@@ -189,9 +190,9 @@ public class ChartFactory {
 
 
     public static final GraphicalView getSupportBarChartView(Context context,
-                                                      XYMultipleSeriesDataset dataset,
-                                                      XYMultipleSeriesRenderer renderer,
-                                                      SupportBarChart.Type type) {
+                                                             XYMultipleSeriesDataset dataset,
+                                                             XYMultipleSeriesRenderer renderer,
+                                                             SupportBarChart.Type type) {
         checkParameters(dataset, renderer);
         XYChart chart = new SupportBarChart(dataset, renderer, type);
         return new GraphicalView(context, chart);
@@ -214,6 +215,25 @@ public class ChartFactory {
                                                            XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer, Type type) {
         checkParameters(dataset, renderer);
         XYChart chart = new RangeBarChart(dataset, renderer, type);
+        return new GraphicalView(context, chart);
+    }
+
+    /**
+     * Creates a combined XY chart view.
+     *
+     * @param context  the context
+     * @param dataset  the multiple series dataset (cannot be null)
+     * @param renderer the multiple series renderer (cannot be null)
+     * @param types    the chart types (cannot be null)
+     * @return a combined XY chart graphical view
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if a dataset number of items is different than the number of
+     *                                  series renderers or number of chart types
+     */
+    public static final GraphicalView getCombinedXYChartView(Context context,
+                                                             XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer, CombinedXYChart.XYCombinedChartDef[] types) {
+        checkParameters(dataset, renderer);
+        CombinedXYChart chart = new CombinedXYChart(dataset, renderer, types);
         return new GraphicalView(context, chart);
     }
 
@@ -298,6 +318,378 @@ public class ChartFactory {
         return new GraphicalView(context, chart);
     }
 
+    /**
+     * Creates a line chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context  the context
+     * @param dataset  the multiple series dataset (cannot be null)
+     * @param renderer the multiple series renderer (cannot be null)
+     * @return a line chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getLineChartIntent(Context context, XYMultipleSeriesDataset dataset,
+                                                  XYMultipleSeriesRenderer renderer) {
+        return getLineChartIntent(context, dataset, renderer, "");
+    }
+
+    /**
+     * Creates a cubic line chart intent that can be used to start the graphical
+     * view activity.
+     *
+     * @param context  the context
+     * @param dataset  the multiple series dataset (cannot be null)
+     * @param renderer the multiple series renderer (cannot be null)
+     * @return a line chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getCubicLineChartIntent(Context context,
+                                                       XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer, float smoothness) {
+        return getCubicLineChartIntent(context, dataset, renderer, smoothness, "");
+    }
+
+    /**
+     * Creates a scatter chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context  the context
+     * @param dataset  the multiple series dataset (cannot be null)
+     * @param renderer the multiple series renderer (cannot be null)
+     * @return a scatter chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getScatterChartIntent(Context context,
+                                                     XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer) {
+        return getScatterChartIntent(context, dataset, renderer, "");
+    }
+
+    /**
+     * Creates a bubble chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context  the context
+     * @param dataset  the multiple series dataset (cannot be null)
+     * @param renderer the multiple series renderer (cannot be null)
+     * @return a scatter chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getBubbleChartIntent(Context context, XYMultipleSeriesDataset dataset,
+                                                    XYMultipleSeriesRenderer renderer) {
+        return getBubbleChartIntent(context, dataset, renderer, "");
+    }
+
+    /**
+     * Creates a time chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context  the context
+     * @param dataset  the multiple series dataset (cannot be null)
+     * @param renderer the multiple series renderer (cannot be null)
+     * @param format   the date format pattern to be used for displaying the X axis
+     *                 date labels. If null, a default appropriate format will be used.
+     * @return a time chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getTimeChartIntent(Context context, XYMultipleSeriesDataset dataset,
+                                                  XYMultipleSeriesRenderer renderer, String format) {
+        return getTimeChartIntent(context, dataset, renderer, format, "");
+    }
+
+    /**
+     * Creates a bar chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context  the context
+     * @param dataset  the multiple series dataset (cannot be null)
+     * @param renderer the multiple series renderer (cannot be null)
+     * @param type     the bar chart type
+     * @return a bar chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getBarChartIntent(Context context, XYMultipleSeriesDataset dataset,
+                                                 XYMultipleSeriesRenderer renderer, Type type) {
+        return getBarChartIntent(context, dataset, renderer, type, "");
+    }
+
+    /**
+     * Creates a line chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context       the context
+     * @param dataset       the multiple series dataset (cannot be null)
+     * @param renderer      the multiple series renderer (cannot be null)
+     * @param activityTitle the graphical chart activity title. If this is null,
+     *                      then the title bar will be hidden. If a blank title is passed in,
+     *                      then the title bar will be the default. Pass in any other string
+     *                      to set a custom title.
+     * @return a line chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getLineChartIntent(Context context, XYMultipleSeriesDataset dataset,
+                                                  XYMultipleSeriesRenderer renderer, String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        XYChart chart = new LineChart(dataset, renderer);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a line chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context       the context
+     * @param dataset       the multiple series dataset (cannot be null)
+     * @param renderer      the multiple series renderer (cannot be null)
+     * @param activityTitle the graphical chart activity title. If this is null,
+     *                      then the title bar will be hidden. If a blank title is passed in,
+     *                      then the title bar will be the default. Pass in any other string
+     *                      to set a custom title.
+     * @return a line chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getCubicLineChartIntent(Context context,
+                                                       XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer, float smoothness,
+                                                       String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        XYChart chart = new CubicLineChart(dataset, renderer, smoothness);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a scatter chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context       the context
+     * @param dataset       the multiple series dataset (cannot be null)
+     * @param renderer      the multiple series renderer (cannot be null)
+     * @param activityTitle the graphical chart activity title
+     * @return a scatter chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getScatterChartIntent(Context context,
+                                                     XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer, String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        XYChart chart = new ScatterChart(dataset, renderer);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a bubble chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context       the context
+     * @param dataset       the multiple series dataset (cannot be null)
+     * @param renderer      the multiple series renderer (cannot be null)
+     * @param activityTitle the graphical chart activity title
+     * @return a scatter chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getBubbleChartIntent(Context context, XYMultipleSeriesDataset dataset,
+                                                    XYMultipleSeriesRenderer renderer, String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        XYChart chart = new BubbleChart(dataset, renderer);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a time chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context       the context
+     * @param dataset       the multiple series dataset (cannot be null)
+     * @param renderer      the multiple series renderer (cannot be null)
+     * @param format        the date format pattern to be used for displaying the X axis
+     *                      date labels. If null, a default appropriate format will be used
+     * @param activityTitle the graphical chart activity title
+     * @return a time chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getTimeChartIntent(Context context, XYMultipleSeriesDataset dataset,
+                                                  XYMultipleSeriesRenderer renderer, String format, String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        TimeChart chart = new TimeChart(dataset, renderer);
+        chart.setDateFormat(format);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a bar chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context       the context
+     * @param dataset       the multiple series dataset (cannot be null)
+     * @param renderer      the multiple series renderer (cannot be null)
+     * @param type          the bar chart type
+     * @param activityTitle the graphical chart activity title
+     * @return a bar chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getBarChartIntent(Context context, XYMultipleSeriesDataset dataset,
+                                                 XYMultipleSeriesRenderer renderer, Type type, String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        BarChart chart = new BarChart(dataset, renderer, type);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a range bar chart intent that can be used to start the graphical
+     * view activity.
+     *
+     * @param context       the context
+     * @param dataset       the multiple series dataset (cannot be null)
+     * @param renderer      the multiple series renderer (cannot be null)
+     * @param type          the range bar chart type
+     * @param activityTitle the graphical chart activity title
+     * @return a range bar chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset and the renderer don't include the same number of
+     *                                  series
+     */
+    public static final Intent getRangeBarChartIntent(Context context,
+                                                      XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer, Type type,
+                                                      String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        RangeBarChart chart = new RangeBarChart(dataset, renderer, type);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a combined XY chart intent that can be used to start the graphical
+     * view activity.
+     *
+     * @param context       the context
+     * @param dataset       the multiple series dataset (cannot be null)
+     * @param renderer      the multiple series renderer (cannot be null)
+     * @param types         the chart types (cannot be null)
+     * @param activityTitle the graphical chart activity title
+     * @return a combined XY chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if a dataset number of items is different than the number of
+     *                                  series renderers or number of chart types
+     */
+    public static final Intent getCombinedXYChartIntent(Context context,
+                                                        XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer, CombinedXYChart.XYCombinedChartDef[] types,
+                                                        String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        CombinedXYChart chart = new CombinedXYChart(dataset, renderer, types);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a pie chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context       the context
+     * @param dataset       the category series dataset (cannot be null)
+     * @param renderer      the series renderer (cannot be null)
+     * @param activityTitle the graphical chart activity title
+     * @return a pie chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset number of items is different than the number of
+     *                                  series renderers
+     */
+    public static final Intent getPieChartIntent(Context context, CategorySeries dataset,
+                                                 DefaultRenderer renderer, String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        PieChart chart = new PieChart(dataset, renderer);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a doughnut chart intent that can be used to start the graphical
+     * view activity.
+     *
+     * @param context       the context
+     * @param dataset       the multiple category series dataset (cannot be null)
+     * @param renderer      the series renderer (cannot be null)
+     * @param activityTitle the graphical chart activity title
+     * @return a pie chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset number of items is different than the number of
+     *                                  series renderers
+     */
+    public static final Intent getDoughnutChartIntent(Context context,
+                                                      MultipleCategorySeries dataset, DefaultRenderer renderer, String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        DoughnutChart chart = new DoughnutChart(dataset, renderer);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a dial chart intent that can be used to start the graphical view
+     * activity.
+     *
+     * @param context       the context
+     * @param dataset       the category series dataset (cannot be null)
+     * @param renderer      the dial renderer (cannot be null)
+     * @param activityTitle the graphical chart activity title
+     * @return a dial chart intent
+     * @throws IllegalArgumentException if dataset is null or renderer is null or
+     *                                  if the dataset number of items is different than the number of
+     *                                  series renderers
+     */
+    public static final Intent getDialChartIntent(Context context, CategorySeries dataset,
+                                                  DialRenderer renderer, String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        DialChart chart = new DialChart(dataset, renderer);
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
 
     /**
      * Checks the validity of the dataset and renderer parameters.

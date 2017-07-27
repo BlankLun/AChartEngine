@@ -44,4 +44,8 @@ public class TimeSeries extends XYSeries {
   protected double getPadding() {
     return 1;
   }
+  
+  protected double getPadding(double x) {
+    return 1;
+  }
 }

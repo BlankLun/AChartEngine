@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2009 - 2013 SC 4ViewSoft SRL
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -41,6 +42,7 @@ import org.achartengine.tools.PanListener;
 import org.achartengine.tools.Zoom;
 import org.achartengine.tools.ZoomListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +50,8 @@ import java.util.List;
  * The view that encapsulates the graphical chart.
  */
 public class GraphicalView extends View {
+
+    private static final String TAG = "GraphicalView";
     /**
      * The chart to be drawn.
      */
@@ -143,12 +147,16 @@ public class GraphicalView extends View {
             mRenderer = ((RoundChart) mChart).getRenderer();
         }
         if (mRenderer.isZoomButtonsVisible()) {
-            zoomInImage = BitmapFactory.decodeStream(GraphicalView.class
-                    .getResourceAsStream("image/zoom_in.png"));
-            zoomOutImage = BitmapFactory.decodeStream(GraphicalView.class
-                    .getResourceAsStream("image/zoom_out.png"));
-            fitZoomImage = BitmapFactory.decodeStream(GraphicalView.class
-                    .getResourceAsStream("image/zoom-1.png"));
+            try {
+                zoomInImage = BitmapFactory.decodeStream(
+                        getResources().getAssets().open("image/zoom_in.png"));
+                zoomOutImage = BitmapFactory.decodeStream(
+                        getResources().getAssets().open("image/zoom_out.png"));
+                fitZoomImage = BitmapFactory.decodeStream(
+                        getResources().getAssets().open("image/zoom-1.png"));
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            }
         }
 
         if (mRenderer instanceof XYMultipleSeriesRenderer

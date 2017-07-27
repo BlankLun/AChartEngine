@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2009 - 2013 SC 4ViewSoft SRL
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -107,7 +107,9 @@ public class LineChart extends XYChart {
                 if (range == null) {
                     fillPoints.addAll(points);
                 } else {
-                    fillPoints.addAll(points.subList(range[0] * 2, range[1] * 2));
+                    if (points.size() > range[0] * 2 && points.size() > range[1] * 2) {
+                        fillPoints.addAll(points.subList(range[0] * 2, range[1] * 2));
+                    }
                 }
 
                 final float referencePoint;
@@ -135,7 +137,8 @@ public class LineChart extends XYChart {
                         || fill.getType() == FillOutsideLine.Type.BOUNDS_BELOW) {
                     List<Float> boundsPoints = new ArrayList<Float>();
                     boolean add = false;
-                    if (fill.getType() == FillOutsideLine.Type.BOUNDS_ABOVE
+                    int length = fillPoints.size();
+                    if (length > 0 && fill.getType() == FillOutsideLine.Type.BOUNDS_ABOVE
                             && fillPoints.get(1) < referencePoint
                             || fill.getType() == FillOutsideLine.Type.BOUNDS_BELOW
                             && fillPoints.get(1) > referencePoint) {
@@ -144,7 +147,7 @@ public class LineChart extends XYChart {
                         add = true;
                     }
 
-                    for (int i = 3; i < fillPoints.size(); i += 2) {
+                    for (int i = 3; i < length; i += 2) {
                         float prevValue = fillPoints.get(i - 2);
                         float value = fillPoints.get(i);
 
@@ -178,19 +181,21 @@ public class LineChart extends XYChart {
                     fillPoints.addAll(boundsPoints);
                 }
                 int length = fillPoints.size();
-                fillPoints.set(0, fillPoints.get(0) + 1);
-                fillPoints.add(fillPoints.get(length - 2));
-                fillPoints.add(referencePoint);
-                fillPoints.add(fillPoints.get(0));
-                fillPoints.add(fillPoints.get(length + 1));
-                for (int i = 0; i < length + 4; i += 2) {
-                    if (fillPoints.get(i + 1) < 0) {
-                        fillPoints.set(i + 1, 0f);
+                if (length > 0) {
+                    fillPoints.set(0, fillPoints.get(0) + 1);
+                    fillPoints.add(fillPoints.get(length - 2));
+                    fillPoints.add(referencePoint);
+                    fillPoints.add(fillPoints.get(0));
+                    fillPoints.add(fillPoints.get(length + 1));
+                    for (int i = 0; i < length + 4; i += 2) {
+                        if (fillPoints.get(i + 1) < 0) {
+                            fillPoints.set(i + 1, 0f);
+                        }
                     }
-                }
 
-                paint.setStyle(Style.FILL);
-                drawPath(canvas, fillPoints, paint, true);
+                    paint.setStyle(Style.FILL);
+                    drawPath(canvas, fillPoints, paint, true);
+                }
             }
         }
         paint.setColor(renderer.getColor());
@@ -236,7 +241,10 @@ public class LineChart extends XYChart {
      */
     public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer, float x, float y,
                                 int seriesIndex, Paint paint) {
+        float oldWidth = paint.getStrokeWidth();
+        paint.setStrokeWidth(((XYSeriesRenderer) renderer).getLineWidth());
         canvas.drawLine(x, y, x + SHAPE_WIDTH, y, paint);
+        paint.setStrokeWidth(oldWidth);
         if (isRenderPoints(renderer)) {
             pointsChart.drawLegendShape(canvas, renderer, x + 5, y, seriesIndex, paint);
         }

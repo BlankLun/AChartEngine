@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.cvte.chart.ChartDemo;
+import com.cvte.chart.R;
 import com.cvte.chart.ui.ColorLevelLineActivity;
 import com.cvte.chart.ui.ColorLevelMultiLineActivity;
 import com.cvte.chart.ui.SupportBarChartActivity;
@@ -23,6 +25,7 @@ public class MyActivity extends Activity {
     private final static int TYPE_SUPPORT_COLOR_TAPE = 3;
     private final static int TYPE_SUPPORT_COLOR_LEVEL_CHART = 4;
     private final static int TYPE_MULTI_COLOR_LEVEL_CHART = 5;
+    private final static int TYPE_MORE = 6;
 
     private ListView mListViewChartDemo;
     private String[] mStringArrayChartTypes = new String[]{
@@ -31,7 +34,8 @@ public class MyActivity extends Activity {
             "扩展的柱状图",
             "支持颜色带的图表",
             "任意图表支持颜色分级",
-            "双曲线颜色分级"};
+            "双曲线颜色分级",
+            "更多图表"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,11 @@ public class MyActivity extends Activity {
                         startActivity(intent);
                     }
                     break;
-
+                    case TYPE_MORE:{
+                        Intent intent = new Intent(MyActivity.this, ChartDemo.class);
+                        startActivity(intent);
+                    }
+                    break;
                 }
             }
         });

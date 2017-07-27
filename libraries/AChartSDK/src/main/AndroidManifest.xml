@@ -10,4 +10,7 @@
         android:targetSdkVersion="7">
     </uses-sdk>
 
+    <application >
+        <activity android:name=".GraphicalActivity"/>
+    </application>
 </manifest>

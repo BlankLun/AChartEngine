@@ -3,9 +3,7 @@ package com.cvte.chart.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.cvte.chart.demo.R;
+import com.cvte.chart.R;
 import com.cvte.chart.logic.ColorLevelLineUtils;
 
 

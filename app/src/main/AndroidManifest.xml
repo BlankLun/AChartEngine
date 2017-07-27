@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    package="com.cvte.chart.demo"
+    package="com.cvte.chart"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
@@ -42,7 +42,11 @@
             android:name="com.cvte.chart.ui.ColorLevelMultiLineActivity"
             android:screenOrientation="portrait">
         </activity>
-
+        <activity android:name=".charts.XYChartBuilder" />
+        <activity android:name=".charts.PieChartBuilder" />
+        <activity android:name="org.achartengine.GraphicalActivity" />
+        <activity android:name=".GeneratedChartDemo" />
+        <activity android:name=".ChartDemo" />
     </application>
 
 </manifest>
