@@ -1,0 +1,8 @@
+*.iml
+.gradle
+.idea
+local.properties
+*.idea
+/build
+/app/build
+/libraries/AChartSDK/build
