@@ -1,24 +1,9 @@
-
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
-repositories {
-    jcenter()
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
-    }
-}
-
-
 android {
-    compileSdkVersion 21
-    buildToolsVersion '21.1.2'
+    compileSdkVersion 24
+    buildToolsVersion '24.0.3'
 
     defaultConfig {
         minSdkVersion 14
@@ -48,8 +33,3 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
-
-
-
-
-
